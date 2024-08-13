@@ -67,6 +67,20 @@ app.get("/students", async (req, res) => {
   }
 });
 
+app.get("/students/:id", async (req, res) => {
+  try {
+    let { id } = req.params;
+    let data = await Student.findOne({ id });
+    if (!data) {
+      return res.status(404).send(`Student not found`);
+    }
+    res.render("studentPage", { data });
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(`Error!`);
+  }
+});
+
 app.get("/*", (req, res) => {
   res.status(404);
   res.send(`Not allowed.`);

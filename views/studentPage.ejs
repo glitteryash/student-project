@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%=data.name%>'s Page</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td>ID</td>
+        <td><%= data.id %></td>
+      </tr>
+      <tr>
+        <td>Name</td>
+        <td><%= data.name %></td>
+      </tr>
+      <tr>
+        <td>Age</td>
+        <td><%= data.age %></td>
+      </tr>
+      <tr>
+        <td rowspan="2">Scholarship</td>
+        <td>Merit <%= data.scholarship.merit %></td>
+      </tr>
+      <tr>
+        <td>Other <%= data.scholarship.other %></td>
+      </tr>
+    </table>
+  </body>
+</html>
