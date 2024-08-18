@@ -5,11 +5,13 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const Student = require("./models/student");
 const port = 3000;
+const methodOverride = require("method-override");
 
 //middleware
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
+app.use(methodOverride("_method"));
 
 //connect to mongoDB
 mongoose
@@ -53,8 +55,34 @@ app.post("/students/insert", (req, res) => {
     });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+app.get("/students/edit/:id", async (req, res) => {
+  try {
+    let { id } = req.params;
+    let data = await Student.findOne({ id });
+    if (!data) {
+      return res.status(404).send(`Student not found`);
+    }
+    res.render("edit.ejs", { data });
+  } catch (e) {
+    console.error(`Failed to find the student.`, e);
+    res.send(`Failed to find the student.`);
+  }
+});
+
+app.put("/students/edit/:id", async (req, res) => {
+  try {
+    let { id } = req.params;
+    let { name, age, merit, other } = req.body;
+    let d = await Student.findOneAndUpdate(
+      { id },
+      { id, name, age, scholarship: { merit, other } },
+      { new: true, runValidators: true }
+    );
+    res.redirect("/students/" + id);
+  } catch (e) {
+    console.error("Error with updating data", e);
+    res.status(500).render("reject.ejs");
+  }
 });
 
 app.get("/students", async (req, res) => {
@@ -84,6 +112,11 @@ app.get("/students/:id", async (req, res) => {
 app.get("/*", (req, res) => {
   res.status(404);
   res.send(`Not allowed.`);
+});
+
+//port setting
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
 
 //show current data from DB
