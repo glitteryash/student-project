@@ -8,8 +8,11 @@
   <body>
     <ul>
       <% data.forEach(student=>{ %>
-      <li><%=student.name%></li>
+      <li><a href="/students/<%=student.id%>"><%=student.name%></a></li>
       <% }) %>
     </ul>
+    <button onclick="window.location.href='/students/insert'">
+      add student
+    </button>
   </body>
 </html>

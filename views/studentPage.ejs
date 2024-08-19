@@ -27,5 +27,14 @@
         <td>Other <%= data.scholarship.other %></td>
       </tr>
     </table>
+    <button onclick="window.location.href='/students/edit/<%= data.id %>'">
+      fix data
+    </button>
+    <button onclick="window.location.href='/students'">back to list</button>
+    <form action="/students/<%= data.id %>?_method=DELETE" method="POST">
+      <button onclick="return confirm('Are you sure to delete the student?')">
+        delete
+      </button>
+    </form>
   </body>
 </html>

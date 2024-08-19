@@ -28,7 +28,7 @@ mongoose
 
 // route setting
 app.get("/", (req, res) => {
-  res.send("This is homepage");
+  res.render("index.ejs");
 });
 
 app.get("/students/insert", (req, res) => {
@@ -75,7 +75,7 @@ app.put("/students/edit/:id", async (req, res) => {
     let { name, age, merit, other } = req.body;
     let d = await Student.findOneAndUpdate(
       { id },
-      { id, name, age, scholarship: { merit, other } },
+      { name, age, scholarship: { merit, other } },
       { new: true, runValidators: true }
     );
     res.redirect("/students/" + id);
@@ -102,11 +102,24 @@ app.get("/students/:id", async (req, res) => {
     if (!data) {
       return res.status(404).send(`Student not found`);
     }
-    res.render("studentPage", { data });
+    res.render("studentPage.ejs", { data });
   } catch (e) {
     console.error(e);
     res.status(500).send(`Error!`);
   }
+});
+
+app.delete("/students/:id", (req, res) => {
+  let { id } = req.params;
+  Student.deleteOne({ id })
+    .then(() => {
+      console.log("The student has been deleted.");
+      res.render("deleteSuccessfully.ejs");
+    })
+    .catch((e) => {
+      console.error("The student hasn't been deleted.");
+      res.status(500).send("The student hasn't been deleted.");
+    });
 });
 
 app.get("/*", (req, res) => {
