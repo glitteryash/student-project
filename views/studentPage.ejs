@@ -32,7 +32,9 @@
     </button>
     <button onclick="window.location.href='/students'">back to list</button>
     <form action="/students/<%= data.id %>?_method=DELETE" method="POST">
-      <button onclick="return confirm('Are you sure to delete the student?')">
+      <button
+        onclick="return confirm('Are you sure you want to delete the student?')"
+      >
         delete
       </button>
     </form>
